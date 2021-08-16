@@ -33,19 +33,6 @@
     <developerConnection>scm:git:git@github.com:amznlabs/ion-java.git</developerConnection>
     <url>git@github.com:amznlabs/ion-java.git</url>
   </scm>
-
-  <!-- http://central.sonatype.org/pages/ossrh-guide.html -->
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
@@ -120,6 +107,16 @@
             <Ion-Java-Build-Time>${build.time}</Ion-Java-Build-Time>
             <Ion-Java-Project-Version>${project.version}</Ion-Java-Project-Version>
           </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <compilerVersion>1.8</compilerVersion>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <!-- TODO findbugs, checkstyle -->
@@ -230,21 +227,27 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <!-- Publish the artifacts. -->
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.3</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
+
+  <repositories>
+    <repository>
+      <id>maven-public</id>
+      <url>https://pkg.arima.xyz/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>maven-releases</id>
+      <url>https://pkg.arima.xyz/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven-snapshots</id>
+      <url>https://pkg.arima.xyz/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
 </project>

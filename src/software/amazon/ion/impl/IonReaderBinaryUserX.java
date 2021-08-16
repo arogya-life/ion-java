@@ -12,6 +12,8 @@
  * language governing permissions and limitations under the License.
  */
 
+/* ------------ Modified: Made this class extendable --------------- */
+
 package software.amazon.ion.impl;
 
 import static software.amazon.ion.SystemSymbols.ION_1_0_SID;
@@ -31,7 +33,7 @@ import software.amazon.ion.impl.PrivateScalarConversions.AS_TYPE;
 import software.amazon.ion.impl.UnifiedInputStreamX.FromByteArray;
 import software.amazon.ion.impl.UnifiedSavePointManagerX.SavePoint;
 
-final class IonReaderBinaryUserX
+class IonReaderBinaryUserX
     extends IonReaderBinarySystemX
     implements PrivateReaderWriter
 {
