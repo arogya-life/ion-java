@@ -3,22 +3,17 @@ package software.amazon.ion.impl;
 import software.amazon.ion.IonSystem;
 import software.amazon.ion.IonType;
 import software.amazon.ion.SystemSymbols;
-
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import software.amazon.ion.impl.lite.IonField;
 
 public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
 
-    private final Set<String> selection;
-    private final LinkedList<String> hierarchy = new LinkedList<>();
-    private String fieldName;
+    private IonField _current;
+    private int hierarchy = 0;
 
     public IonReaderBinaryUserXSelective(byte[] data, int offset, int length,
-                                         IonSystem system, Set<String> selection) {
+                                         IonSystem system, IonField _current) {
         super(system, system.getCatalog(), UnifiedInputStreamX.makeStream(data, offset, length));
-        this.selection = selection;
+        this._current = _current;
     }
 
     @Override
@@ -29,30 +24,26 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
             return null;
         }
 
-        fieldName = getFieldName();
+        String file_name = getFieldName();
 
-        if (fieldName == null || SystemSymbols.SYMBOLS.equals(fieldName)) {
+        if (file_name == null || SystemSymbols.SYMBOLS.equals(file_name)) {
             return type;
         }
 
         if (type == IonType.STRUCT || type == IonType.LIST) {
-            hierarchy.add(fieldName);
-            if (selection.contains(hierarchy.stream().filter(Objects::nonNull).collect(Collectors.joining(".")))) {
-                hierarchy.removeLast();
+            IonField field = _current.getField(getFieldName());
+            if (field != null) {
+                this._current = field;
                 return type;
             } else {
-                hierarchy.removeLast();
                 super.stepIn();
                 super.stepOut();
             }
             return next();
         } else {
-            hierarchy.add(fieldName);
-            if (selection.contains(hierarchy.stream().filter(Objects::nonNull).collect(Collectors.joining(".")))) {
-                hierarchy.removeLast();
+            if (this._current.contains(file_name)) {
                 return type;
             } else {
-                hierarchy.removeLast();
                 return next();
             }
         }
@@ -60,13 +51,19 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
 
     @Override
     public void stepIn() {
-        hierarchy.add(fieldName);
+        hierarchy = (hierarchy << 1);
+        if (getFieldName() != null && !SystemSymbols.SYMBOLS.equals(getFieldName())) {
+            hierarchy = hierarchy + 1;
+        }
         super.stepIn();
     }
 
     @Override
     public void stepOut() {
-        hierarchy.removeLast();
+        if ((hierarchy & 1) == 1) {
+            this._current = this._current.getParent();
+        }
+        hierarchy = hierarchy >> 1;
         super.stepOut();
     }
 }
