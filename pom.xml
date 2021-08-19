@@ -1,9 +1,9 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>software.amazon.ion</groupId>
   <artifactId>ion-java</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3.ARO.01</version>
   <packaging>bundle</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -32,6 +32,7 @@
     <connection>scm:git:git@github.com:amznlabs/ion-java.git</connection>
     <developerConnection>scm:git:git@github.com:amznlabs/ion-java.git</developerConnection>
     <url>git@github.com:amznlabs/ion-java.git</url>
+    <tag>ion-java-1.0.3.ARO.01</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,7 +71,7 @@
               <exportAntProperties>true</exportAntProperties>
               <target>
                 <tstamp>
-                  <format property="build.time" pattern="yyyy-MM-dd'T'HH:mm:ssXXX"/>
+                  <format property="build.time" pattern="yyyy-MM-dd'T'HH:mm:ssXXX" />
                 </tstamp>
               </target>
             </configuration>
