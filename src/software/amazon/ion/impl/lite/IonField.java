@@ -14,6 +14,10 @@ public class IonField {
         this.parent = parent;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public boolean contains(String name) {
         for (IonField field : fields) {
             if (field.name.equals(name)) {
