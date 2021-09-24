@@ -42,4 +42,8 @@ public class IonField {
     public IonField getParent() {
         return parent;
     }
+
+    public Set<IonField> getChild() {
+        return fields;
+    }
 }

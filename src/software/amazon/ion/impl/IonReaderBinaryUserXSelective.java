@@ -9,6 +9,7 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
 
     private IonField _current;
     private int hierarchy = 0;
+    private int scalarLevel = Integer.MAX_VALUE;
 
     public IonReaderBinaryUserXSelective(byte[] data, int offset, int length,
                                          IonSystem system, IonField _current) {
@@ -26,7 +27,7 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
 
         String file_name = getFieldName();
 
-        if (file_name == null || SystemSymbols.SYMBOLS.equals(file_name)) {
+        if (file_name == null || SystemSymbols.SYMBOLS.equals(file_name) || scalarLevel != Integer.MAX_VALUE) {
             return type;
         }
 
@@ -34,6 +35,9 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
             IonField field = _current.getField(getFieldName());
             if (field != null) {
                 this._current = field;
+                if (field.getChild().isEmpty()) {
+                    scalarLevel = hierarchy;
+                }
                 return type;
             } else {
                 super.stepIn();
@@ -60,10 +64,14 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
 
     @Override
     public void stepOut() {
-        if ((hierarchy & 1) == 1) {
+        if ((hierarchy & 1) == 1 && scalarLevel == Integer.MAX_VALUE) {
             this._current = this._current.getParent();
         }
         hierarchy = hierarchy >> 1;
+        if (scalarLevel != Integer.MAX_VALUE && scalarLevel == hierarchy) {
+            this._current = this._current.getParent();
+            scalarLevel = Integer.MAX_VALUE;
+        }
         super.stepOut();
     }
 }
