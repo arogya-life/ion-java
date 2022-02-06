@@ -8,7 +8,7 @@ public class IonField implements Serializable {
 
     private String name;
     private IonField parent;
-    private final Set<IonField> fields = new HashSet<>();
+    private Set<IonField> fields = new HashSet<>();
 
     public IonField() {
 
@@ -17,10 +17,6 @@ public class IonField implements Serializable {
     public IonField(String name, IonField parent) {
         this.name = name;
         this.parent = parent;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean contains(String name) {
@@ -44,11 +40,28 @@ public class IonField implements Serializable {
         this.fields.addAll(fields);
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public IonField getParent() {
         return parent;
     }
 
-    public Set<IonField> getChild() {
+    public void setParent(IonField parent) {
+        this.parent = parent;
+    }
+
+    public Set<IonField> getFields() {
         return fields;
+    }
+
+    public void setFields(Set<IonField> fields) {
+        this.fields = fields;
     }
 }

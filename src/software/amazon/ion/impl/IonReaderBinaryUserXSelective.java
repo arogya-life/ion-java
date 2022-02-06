@@ -35,7 +35,7 @@ public class IonReaderBinaryUserXSelective extends IonReaderBinaryUserX {
             IonField field = _current.getField(getFieldName());
             if (field != null) {
                 this._current = field;
-                if (field.getChild().isEmpty()) {
+                if (field.getFields().isEmpty()) {
                     scalarLevel = hierarchy;
                 }
                 return type;
