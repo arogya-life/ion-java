@@ -1,13 +1,18 @@
 package software.amazon.ion.impl.lite;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IonField {
+public class IonField implements Serializable {
 
-    private final String name;
-    private final IonField parent;
+    private String name;
+    private IonField parent;
     private final Set<IonField> fields = new HashSet<>();
+
+    public IonField() {
+
+    }
 
     public IonField(String name, IonField parent) {
         this.name = name;
